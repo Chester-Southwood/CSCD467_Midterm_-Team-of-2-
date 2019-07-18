@@ -64,7 +64,7 @@ public class ThreadPool
 	{
 		for(int i = 0; i < holders.length; i++)
 		{
-			holders[i].start();
+			holders[i].interrupt();
 		}
 	}
 	
