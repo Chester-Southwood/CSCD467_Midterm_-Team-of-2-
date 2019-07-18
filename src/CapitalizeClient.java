@@ -31,7 +31,8 @@ public class CapitalizeClient {
         * listener with the textfield so that pressing Enter in the
         * listener sends the textfield contents to the server.
         */
-      public CapitalizeClient() {
+      public CapitalizeClient() 
+      {
 
             // Layout GUI
             messageArea.setEditable(false);
@@ -39,7 +40,8 @@ public class CapitalizeClient {
             frame.getContentPane().add(new JScrollPane(messageArea), "Center");
 
             // Add Listeners
-            dataField.addActionListener(new ActionListener() {
+            dataField.addActionListener(new ActionListener() 
+            {
                   /**
                     * Responds to pressing the enter key in the textfield
                     * by sending the contents of the text field to the
@@ -48,17 +50,22 @@ public class CapitalizeClient {
                     * the whole application, which closes all sockets,
                     * streams and windows.
                     */
-                  public void actionPerformed(ActionEvent e) {
+                  public void actionPerformed(ActionEvent e) 
+                  {
                         out.println(dataField.getText());
                         String response;
-                        try {
+                        try 
+                        {
                               response = in.readLine();
-                              if (response == null || response.equals("")) {
+                              if (response == null || response.equals("")) 
+                              {
                                   System.out.println("client to terminate.");
-                                       System.exit(0);
-                                 }
-                        } catch (IOException ex) {
-                                   response = "Error: " + ex;
+                                  System.exit(0);
+                              }
+                        } 
+                        catch (IOException ex) 
+                        {
+                            response = "Error: " + ex;
                             System.out.println("" + response + "\n");
                         }
                         messageArea.append(response + "\n");
@@ -74,7 +81,8 @@ public class CapitalizeClient {
         * protocol says that the server sends three lines of text to the
         * client immediately after establishing a connection.
         */
-      public void connectToServer() throws IOException {
+      public void connectToServer() throws IOException 
+      {
 
             // Get the server address from a dialog box.
             String serverAddress = JOptionPane.showInputDialog(
@@ -85,20 +93,24 @@ public class CapitalizeClient {
 
             // Make connection and initialize streams
             Socket socket = new Socket(serverAddress, 9898);
-            in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
             // Consume the initial welcoming messages from the server
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) 
+            {
                   messageArea.append(in.readLine() + "\n");
             }
+            
+            //chester line
+            socket.close();
       }
 
       /**
         * Runs the client application.
         */
-      public static void main(String[] args) throws Exception {
+      public static void main(String[] args) throws Exception 
+      {
             CapitalizeClient client = new CapitalizeClient();
             client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             client.frame.pack();
