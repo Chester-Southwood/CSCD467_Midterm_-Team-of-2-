@@ -67,13 +67,12 @@ public class CapitalizeClient {
                         String response;
                         try 
                         {
-                              response = in.readLine();
-                              if (response == null || response.equals("")) 
+                              response = in.readLine(); //We need to send "response" to the server.
+                              /*if (response == null || response.equals("")) 
                               {
                                   System.out.println("client to terminate.");
                                   System.exit(0);
-                              }
-                              
+                              }*/
                         } 
                         catch (IOException ex) 
                         {
@@ -115,7 +114,7 @@ public class CapitalizeClient {
             }
             
             //chester line
-            socket.close();
+            //socket.close();
       }
 
       /**

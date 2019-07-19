@@ -28,10 +28,6 @@ public class MyMonitor
 			return serviceRequested;
 		}
 
-		public void doMath(String serviceRequested)
-		{
-			//This is where we call string.split, have each command do math, etc. Pretty simple? I think?
-		}
 		
 		
 		public void setServiceRequested(String serviceRequested) 
@@ -79,7 +75,8 @@ public class MyMonitor
 		@Override
 		public String toString()
 		{
-			return this.action.toString();
+			//return this.action.toString();
+			return"";
 		}
 	}
 	
@@ -107,7 +104,7 @@ public class MyMonitor
 		this.size = 0;
 	}
 	
-	public synchronized int getLineCount()
+	/*public synchronized int getLineCount()
 	{
 		return this.lineCount;
 	}
@@ -135,7 +132,7 @@ public class MyMonitor
 	public synchronized void setIsDoneSearching(boolean value)
 	{
 		this.isDoneSearching = value;
-	}
+	}*/
 
 	public synchronized boolean isEmpty() 
 	{

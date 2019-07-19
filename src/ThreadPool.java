@@ -27,8 +27,8 @@ public class ThreadPool
 		holders = new WorkerThread[5];
 		for(int i = 0; i < holders.length; i++)
 		{
-			holders[i] = new WorkerThread();
-			holders[i].start();
+			//holders[i] = new WorkerThread();
+			//holders[i].start();	//tHIS 
 		}
 			
 	}
@@ -37,9 +37,58 @@ public class ThreadPool
 //processing if there are available jobs in the jobQueue.	
 	public static class WorkerThread extends Thread 
 	{
+		public String serviceRequested;
+		public int result;
+		public WorkerThread(String serviceRequested)
+		{
+			this.serviceRequested = serviceRequested;
+		}
+		@Override
+		public void run()
+		{
+			//“ADD,4,5”, “SUB,10,9”, “MUL,2,3”, “DIV,4,2” and “KILL”.		
+			//This is where we call string.split, have each command do math, etc. Pretty simple? I think?
+			if(serviceRequested.equals("KILL"))
+			{
+				result = 1; //change this to kill the threads - may have to do more with this
+			}
+			String[] operands = serviceRequested.split(",");
+			int num1 = Integer.parseInt(operands[1]);
+			int num2 = Integer.parseInt(operands[2]);
+			if(operands[0].equals("ADD"))
+			{
+				result = num1 + num2;
+			}
+			else if(operands[0].equals("SUB"))
+			{
+				result = num1 - num2;
+			}
+			else if(operands[0].equals("MUL"))
+			{
+				result = num1 * num2;
+			}
+			else //if(operands[0].equals("DIV"))
+			{
+				result = num1 / num2;
+			}
+			System.out.println(result);
+		}
 		
+		@Override
+		public String toString()
+		{
+			return ""+this.result;
+		}
 	}
 
+//A test method to get threads started and running
+	public void testThread(String serviceRequested)
+	{
+		WorkerThread myTest = new WorkerThread(serviceRequested);
+		holders[0] = myTest; //stores the worker thread references
+		holders[0].start();
+	}
+	
 //start all available threads in the pool and Worker
 //threads start to process jobs	
 	public void startPool()
@@ -62,7 +111,7 @@ public class ThreadPool
 			}
 			else
 			{ 
-				temp[i] = new WorkerThread();
+				//temp[i] = new WorkerThread();
 				temp[i].start();
 			}
 		}
@@ -100,5 +149,12 @@ public class ThreadPool
 	public int maxCapacity()
 	{
 		return this.maxCapacity;
+	}
+	
+	//Current test method
+	@Override
+	public String toString()
+	{
+		return holders[0].toString();
 	}
 }

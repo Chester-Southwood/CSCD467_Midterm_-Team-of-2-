@@ -76,21 +76,31 @@ public class CapitalizeServer {
                 // after every newline.
                 BufferedReader in = new BufferedReader( new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
+            	MyMonitor JobQueue = new MyMonitor(); //The JobQueue that handles the commands. -Anthony
+            	ThreadPool myPool = new ThreadPool();
+            	ThreadManager myManager = new ThreadManager(JobQueue, myPool);            	
                 // Send a welcome message to the client.
                 out.println("Hello, you are client #" + clientNumber + ".");
                 out.println("Enter a line with only a period to quit\n");
 
                 // Get messages from the client, line by line; return them
-                // capitalized
+                /* 
+                 * When a message is sent to the server, 
+                 * the server main thread has to create a job  
+                 * and put it into the jobQueue (MyMonitor class) used by the ThreadPool object.   
+                 */
+
+
                 while (true) 
-                {
+                { 
+                	
                     String input = in.readLine();
                     if (input == null || input.equals(".")) 
                     {
                         break;
                     }
-                    out.println(input.toUpperCase());
+                    myPool.testThread(input);
+                    out.println(myPool);
                 }
             } 
             catch (IOException e) 
