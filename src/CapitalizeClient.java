@@ -1,3 +1,13 @@
+/*
+ * Modify the client and server program so that it can accept and support five types of commands, 
+ * including “ADD,4,5”, “SUB,10,9”, “MUL,2,3”, “DIV,4,2” and “KILL”.
+ * there is no space between operands and operators in the command string.
+ * 
+ * When a message is sent to the server, 
+ * the server main thread has to create a job  
+ * and put it into the jobQueue (MyMonitor class) used by the ThreadPool object.   
+ */
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -40,6 +50,7 @@ public class CapitalizeClient {
             frame.getContentPane().add(new JScrollPane(messageArea), "Center");
 
             // Add Listeners
+            //This is where we'll need to create a job, insert it into jobQueue, that's us
             dataField.addActionListener(new ActionListener() 
             {
                   /**
@@ -62,6 +73,7 @@ public class CapitalizeClient {
                                   System.out.println("client to terminate.");
                                   System.exit(0);
                               }
+                              
                         } 
                         catch (IOException ex) 
                         {

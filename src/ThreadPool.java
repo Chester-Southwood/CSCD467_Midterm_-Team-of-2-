@@ -15,11 +15,15 @@ public class ThreadPool
 	WorkerThread holders[]; //stores the worker thread references
 	boolean stopped; //used to receive a stop signal from main thread
 	MyMonitor jobQueue; //shared by all WorkerThread in the pool and ThreadManager
+	int v;
+	int t1;
+	int t2;
 	//and the main server thread
 
 	public ThreadPool()
 	{
 		this.maxCapacity = 40;
+		actualNumberThreads = 5;
 		holders = new WorkerThread[5];
 		for(int i = 0; i < holders.length; i++)
 		{
@@ -49,13 +53,33 @@ public class ThreadPool
 //double the threads in pool according to threshold	
 	public void increaseThreadsInPool()
 	{
-		this.holders = new WorkerThread[holders.length * 2];
+		WorkerThread[] temp = new WorkerThread[holders.length * 2];
+		for(int i = 0; i < temp.length; i++)
+		{
+			if(i < holders.length)
+			{
+				temp[i] = holders[i];
+			}
+			else
+			{ 
+				temp[i] = new WorkerThread();
+				temp[i].start();
+			}
+		}
+		this.holders = temp;
+		actualNumberThreads = actualNumberThreads *2;
 	}
 	
 //halve the threads in pool according to threshold	
 	public void decreaseThreadsInPool()
 	{
-		this.holders = new WorkerThread[holders.length/2];
+		WorkerThread[] temp = new WorkerThread[holders.length/2];
+		for(int i = 0; i < temp.length; i++)
+		{
+			temp[i] = holders[i];
+		}
+		this.holders = temp;
+		actualNumberThreads = actualNumberThreads/2;
 	}
 	
 //terminate all threads in the pool gracefully
@@ -70,7 +94,7 @@ public class ThreadPool
 	
 	public int numberThreadsRunning()
 	{
-		return holders.length; //Not accurate. 
+		return actualNumberThreads; 
 	}
 	
 	public int maxCapacity()

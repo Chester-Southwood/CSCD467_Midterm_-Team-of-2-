@@ -28,6 +28,12 @@ public class MyMonitor
 			return serviceRequested;
 		}
 
+		public void doMath(String serviceRequested)
+		{
+			//This is where we call string.split, have each command do math, etc. Pretty simple? I think?
+		}
+		
+		
 		public void setServiceRequested(String serviceRequested) 
 		{
 			this.serviceRequested = serviceRequested;
@@ -78,6 +84,7 @@ public class MyMonitor
 	}
 	
 	//took queue class from previous assignment with modifications. Still needs work on it for functionality of this project.
+	//Smart!
 	
 	private class Node 
     {
