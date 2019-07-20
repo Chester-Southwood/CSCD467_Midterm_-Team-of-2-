@@ -10,11 +10,17 @@ import java.net.Socket;
 
 public class MyMonitor 
 {
-	private class Job 
+	class Job 
 	{
 		private String serviceRequested;
 		private PrintWriter pw;
 		private Socket client;
+		private Job next;
+			
+		public Job(String serviceRequested) throws IOException
+		{
+			this.setServiceRequested(serviceRequested);
+		}
 		
 		public Job(String serviceRequested, Socket client) throws IOException
 		{
@@ -28,7 +34,35 @@ public class MyMonitor
 			return serviceRequested;
 		}
 
-		
+		public void runJob()
+		{
+			int result;
+			if(serviceRequested.equals("KILL"))
+			{
+				result = 1; //change this to kill the threads - may have to do more with this
+			}
+			String[] operands = serviceRequested.split(",");
+			int num1 = Integer.parseInt(operands[1]);
+			int num2 = Integer.parseInt(operands[2]);
+			if(operands[0].equals("ADD"))
+			{
+				result = num1 + num2;
+			}
+			else if(operands[0].equals("SUB"))
+			{
+				result = num1 - num2;
+			}
+			else if(operands[0].equals("MUL"))
+			{
+				result = num1 * num2;
+			}
+			else //if(operands[0].equals("DIV"))
+			{
+				result = num1 / num2;
+			}
+			out.println(result);
+			out.println(result);
+		}
 		
 		public void setServiceRequested(String serviceRequested) 
 		{
@@ -83,23 +117,14 @@ public class MyMonitor
 	//took queue class from previous assignment with modifications. Still needs work on it for functionality of this project.
 	//Smart!
 	
-	private class Node 
-    {
-	   private Object data;
-	   private Node next;
-	   public Node(Object newData) 
-       {
-		   this.data = newData;
-		   this.next = null;
-	   }
-	}  
-	
 	private final int maxSize;
-	private Node head, tail;
+	private Job head, tail;
 	private int size;
+	PrintWriter out;
 	
-	public MyMonitor()
+	public MyMonitor(PrintWriter out)
 	{
+		this.out = out;
 		this.maxSize = 50;
 		this.size = 0;
 	}
@@ -149,7 +174,7 @@ public class MyMonitor
 		return this.size;
 	}
 	 
-	public synchronized void enqueue(Object arg0) 
+	public synchronized void enqueue(String arg0) throws IOException 
 	{
 		while(this.isFull())
 		{
@@ -163,7 +188,7 @@ public class MyMonitor
 			}
 		}
 		
-		Node node = new Node(arg0);
+		Job node = new Job(arg0);
 		
 		if (this.isEmpty())
 		{
@@ -179,7 +204,12 @@ public class MyMonitor
 		
 		notifyAll();
 	}
-	 
+	
+	public synchronized Job getHead()
+	{
+		return head; 
+	}
+	
 	public synchronized Object dequeue() 
 	{
 		while(this.isEmpty())
@@ -194,8 +224,8 @@ public class MyMonitor
 	         }		
 	    }
 		
-		Object data = head.data;
-		Node oldHead = head;
+		Object data = head.serviceRequested;
+		Job oldHead = head;
 
 		head = head.next;
 		oldHead.next = null;
@@ -215,12 +245,12 @@ public class MyMonitor
 	@Override
 	public String toString()
 	{
-		Node tempNode = this.head;
+		Job tempNode = this.head;
 		String toStr = "";
 		
 		while(tempNode != null)
 		{
-			toStr.concat(" " + (String)tempNode.data);
+			toStr.concat(" " + (String)tempNode.serviceRequested);
 			tempNode = tempNode.next;
 		}
 		

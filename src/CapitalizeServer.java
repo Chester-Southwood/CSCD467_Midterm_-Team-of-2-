@@ -76,8 +76,8 @@ public class CapitalizeServer {
                 // after every newline.
                 BufferedReader in = new BufferedReader( new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            	MyMonitor JobQueue = new MyMonitor(); //The JobQueue that handles the commands. -Anthony
-            	ThreadPool myPool = new ThreadPool();
+            	MyMonitor JobQueue = new MyMonitor(out); //The JobQueue that handles the commands. -Anthony
+            	ThreadPool myPool = new ThreadPool(JobQueue);
             	ThreadManager myManager = new ThreadManager(JobQueue, myPool);            	
                 // Send a welcome message to the client.
                 out.println("Hello, you are client #" + clientNumber + ".");
@@ -99,8 +99,12 @@ public class CapitalizeServer {
                     {
                         break;
                     }
-                    myPool.testThread(input);
-                    out.println(myPool);
+                    JobQueue.enqueue(input); //We create the first job and add it to the queue.
+                    //so now the first job needs to go from the queue, to the pool, and then run.
+                    myPool.runMe();
+                    //So runMe runs the first item in the thread,
+                    //Each thread has one job. When it runs, it tells its job to follow the commanded input.
+                    //out.println(myPool);
                 }
             } 
             catch (IOException e) 

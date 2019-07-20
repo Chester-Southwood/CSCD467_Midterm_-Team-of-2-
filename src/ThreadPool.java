@@ -1,3 +1,5 @@
+import java.io.PrintWriter;
+
 /*
  * Your ThreadPool class will contain a pool of Worker threads.
  * 
@@ -20,8 +22,9 @@ public class ThreadPool
 	int t2;
 	//and the main server thread
 
-	public ThreadPool()
+	public ThreadPool(MyMonitor jobQueue)
 	{
+		this.jobQueue = jobQueue;
 		this.maxCapacity = 40;
 		actualNumberThreads = 5;
 		holders = new WorkerThread[5];
@@ -30,63 +33,57 @@ public class ThreadPool
 			//holders[i] = new WorkerThread();
 			//holders[i].start();	//tHIS 
 		}
-			
+	}
+	
+	public void runMe()
+	{
+		for(int i = 0; i < holders.length; i++)
+		{
+			while(jobQueue.size() > 0)
+			{
+				holders[0] = new WorkerThread();
+				holders[0].start();
+			}
+		}
 	}
 	
 //each Worker will grab a job in the jobQueue for
 //processing if there are available jobs in the jobQueue.	
-	public static class WorkerThread extends Thread 
+	public class WorkerThread extends Thread 
 	{
-		public String serviceRequested;
+		public boolean running = false;
+		public MyMonitor.Job myJob;
 		public int result;
-		public WorkerThread(String serviceRequested)
+		public WorkerThread()
 		{
-			this.serviceRequested = serviceRequested;
+			this.myJob = jobQueue.getHead();
+			jobQueue.dequeue();
 		}
 		@Override
 		public void run()
 		{
 			//“ADD,4,5”, “SUB,10,9”, “MUL,2,3”, “DIV,4,2” and “KILL”.		
 			//This is where we call string.split, have each command do math, etc. Pretty simple? I think?
-			if(serviceRequested.equals("KILL"))
-			{
-				result = 1; //change this to kill the threads - may have to do more with this
-			}
-			String[] operands = serviceRequested.split(",");
-			int num1 = Integer.parseInt(operands[1]);
-			int num2 = Integer.parseInt(operands[2]);
-			if(operands[0].equals("ADD"))
-			{
-				result = num1 + num2;
-			}
-			else if(operands[0].equals("SUB"))
-			{
-				result = num1 - num2;
-			}
-			else if(operands[0].equals("MUL"))
-			{
-				result = num1 * num2;
-			}
-			else //if(operands[0].equals("DIV"))
-			{
-				result = num1 / num2;
-			}
-			System.out.println(result);
+			running = true;
+			myJob.runJob();
 		}
 		
-		@Override
-		public String toString()
-		{
-			return ""+this.result;
-		}
 	}
 
 //A test method to get threads started and running
-	public void testThread(String serviceRequested)
+	public void addToPool(MyMonitor.Job myJob)
 	{
-		WorkerThread myTest = new WorkerThread(serviceRequested);
-		holders[0] = myTest; //stores the worker thread references
-		holders[0].start();
+		int cur = -1;
+		for(int i = 0; i < holders.length; i++)
+		{
+			if(!(holders[i].running))
+			{
+				cur = i;
+				i = holders.length;
+			}
+		}
+		holders[cur] = new WorkerThread();
+		
 	}
 	
 //start all available threads in the pool and Worker
