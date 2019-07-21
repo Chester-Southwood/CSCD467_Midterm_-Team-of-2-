@@ -30,7 +30,7 @@ public class ThreadPool
 		holders = new WorkerThread[5];
 		for(int i = 0; i < holders.length; i++)
 		{
-			//holders[i] = new WorkerThread();
+			holders[i] = new WorkerThread();
 			//holders[i].start();	//tHIS 
 		}
 	}

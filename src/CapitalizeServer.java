@@ -76,9 +76,9 @@ public class CapitalizeServer {
                 // after every newline.
                 BufferedReader in = new BufferedReader( new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            	MyMonitor JobQueue = new MyMonitor(out); //The JobQueue that handles the commands. -Anthony
-            	ThreadPool myPool = new ThreadPool(JobQueue);
-            	ThreadManager myManager = new ThreadManager(JobQueue, myPool);            	
+            	MyMonitor jobQueue = new MyMonitor(out); //The JobQueue that handles the commands. -Anthony
+            	ThreadPool myPool = new ThreadPool(jobQueue);
+            	ThreadManager myManager = new ThreadManager(jobQueue, myPool);            	
                 // Send a welcome message to the client.
                 out.println("Hello, you are client #" + clientNumber + ".");
                 out.println("Enter a line with only a period to quit\n");
@@ -93,15 +93,27 @@ public class CapitalizeServer {
 
                 while (true) 
                 { 
+                	//reassign new instances to reader and writer for new thread
+                	in = new BufferedReader( new InputStreamReader(socket.getInputStream()));
+                    out = new PrintWriter(socket.getOutputStream(), true);
                 	
                     String input = in.readLine();
-                    if (input == null || input.equals(".")) 
+                    if (input == null || input.equals(".") || input.toLowerCase().contentEquals("kill"))
                     {
-                        break;
+                    	myPool.stopPool();
+                    	break;
                     }
-                    JobQueue.enqueue(input); //We create the first job and add it to the queue.
-                    //so now the first job needs to go from the queue, to the pool, and then run.
-                    myPool.runMe();
+                    else if(jobQueue.isFull())
+                    {
+                    	in.close();
+                    	out.close();
+                    }
+                    else
+                    {
+                    	jobQueue.enqueue(input); //We create the first job and add it to the queue.
+                        //so now the first job needs to go from the queue, to the pool, and then run.
+                    }
+
                     //So runMe runs the first item in the thread,
                     //Each thread has one job. When it runs, it tells its job to follow the commanded input.
                     //out.println(myPool);
