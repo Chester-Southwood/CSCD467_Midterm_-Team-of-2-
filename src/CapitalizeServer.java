@@ -79,7 +79,9 @@ public class CapitalizeServer {
             	MyMonitor jobQueue = new MyMonitor(out); //The JobQueue that handles the commands. -Anthony
             	ThreadPool myPool = new ThreadPool(jobQueue);
             	ThreadManager myManager = new ThreadManager(jobQueue, myPool);            	
-                // Send a welcome message to the client.
+                Thread managerThread = new Thread(myManager);
+                managerThread.start();
+            	// Send a welcome message to the client.
                 out.println("Hello, you are client #" + clientNumber + ".");
                 out.println("Enter a line with only a period to quit\n");
 

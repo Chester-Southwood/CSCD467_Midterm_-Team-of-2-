@@ -9,17 +9,35 @@
  * The ThreadManager terminates when a command “KILL” is sent through the client to the server.
  */
 
-public class ThreadManager 
+public class ThreadManager implements Runnable
 {
 	public MyMonitor jobQueue;
 	public ThreadPool myPool; //
-	int v; //Amount of seconds to decide the number of threads
+	private int v; //Amount of seconds to decide the number of threads
 	int t; //Number of threads
 	public ThreadManager(MyMonitor jobQueue, ThreadPool myPool)
 	{
 		this.jobQueue = jobQueue;
 		this.myPool = myPool;
 	}
+	
+	@Override
+	public void run() 
+	{
+		while(myPool.isRunning()) //not termianted
+		{
+			changePool();
+			try
+			{
+				wait(v);
+			}
+			catch(InterruptedException e)
+			{
+				return; //termiante
+			}
+		}
+	}	
+	
 	public void changePool() //This will run every v seconds. What is V supposed to be? I have no clue.   
 	{
 //Increasing		
@@ -40,5 +58,5 @@ public class ThreadManager
 		{
 			myPool.decreaseThreadsInPool();		//Shrink from 10 to 5
 		}
-	}	
+	}
 }

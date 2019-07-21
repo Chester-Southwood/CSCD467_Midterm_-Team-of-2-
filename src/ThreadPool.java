@@ -20,10 +20,12 @@ public class ThreadPool
 	final int v = 500; //5 seconds
 	int t1;
 	int t2;
+	private boolean isRunning;
 	//and the main server thread
 
 	public ThreadPool(MyMonitor jobQueue)
 	{
+		isRunning = true;
 		this.jobQueue = jobQueue;
 		this.maxCapacity = 40;
 		actualNumberThreads = 5;
@@ -152,6 +154,11 @@ public class ThreadPool
 	public synchronized int maxCapacity()
 	{
 		return this.maxCapacity;
+	}
+	
+	public synchronized boolean isRunning()
+	{
+		return isRunning;
 	}
 	
 	//Current test method

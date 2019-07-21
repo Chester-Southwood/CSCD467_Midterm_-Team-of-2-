@@ -43,6 +43,7 @@ public class MyMonitor
 			if(serviceRequested.equals("KILL"))
 			{
 				result = 1; //change this to kill the threads - may have to do more with this
+				return;
 			}
 			String[] operands = serviceRequested.split(",");
 			int num1 = Integer.parseInt(operands[1]);
