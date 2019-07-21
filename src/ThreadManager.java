@@ -13,7 +13,7 @@ public class ThreadManager implements Runnable
 {
 	public MyMonitor jobQueue;
 	public ThreadPool myPool; //
-	private int v; //Amount of seconds to decide the number of threads
+	private int v = 500; //Amount of seconds to decide the number of threads
 	int t; //Number of threads
 	public ThreadManager(MyMonitor jobQueue, ThreadPool myPool)
 	{
@@ -29,7 +29,7 @@ public class ThreadManager implements Runnable
 			changePool();
 			try
 			{
-				wait(v);
+				Thread.sleep(v);
 			}
 			catch(InterruptedException e)
 			{

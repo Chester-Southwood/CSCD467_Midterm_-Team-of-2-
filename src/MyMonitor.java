@@ -171,7 +171,7 @@ public class MyMonitor
 			} 
 			catch (InterruptedException e) 
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 		
@@ -207,7 +207,7 @@ public class MyMonitor
 	         }
 	         catch (InterruptedException e ) 
 	         {
-	             e.printStackTrace();//should stop thread?
+	             //e.printStackTrace();//should stop thread?
 	         }		
 	    }
 		
