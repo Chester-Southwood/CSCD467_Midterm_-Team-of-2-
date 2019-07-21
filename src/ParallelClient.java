@@ -7,7 +7,7 @@ public class ParallelClient
 		for(int x = 0; x < clients.length; x++)
 		{
 			clients[x] = new Client();
-			clients[x].start();
+			clients[x].start(); 
 			
 		}
 		for(int x = 0; x < clients.length; x++)
@@ -17,4 +17,4 @@ public class ParallelClient
 
 		System.out.println("Parallel Tests are done!!");
 	}
-}
+} 

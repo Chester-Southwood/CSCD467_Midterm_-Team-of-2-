@@ -21,7 +21,7 @@ public class Client extends Thread
     	  try
     	  {
     		  connectToServer();
-    		  String welcome = in.readLine();
+    		  String welcome = in.readLine(); 
     		  System.out.print(welcome + "\n");
     		  if(!welcome.equals("Server busy try again later."))
     		  {
@@ -37,7 +37,7 @@ public class Client extends Thread
 	                      {
 	                          System.out.println("client to terminate.");
 	                      }
-	    			  } 
+	    			  }  
 	    			  catch (IOException ex) 
 	    			  {
                            response = "Error: " + ex;

@@ -20,19 +20,17 @@ public class ThreadPool
 	final int v = 500; //5 seconds
 	int t1;
 	int t2;
-	private boolean isRunning;
 	//and the main server thread
 
 	public ThreadPool(MyMonitor jobQueue)
 	{
-		isRunning = true;
 		this.jobQueue = jobQueue;
 		this.maxCapacity = 40;
 		actualNumberThreads = 5;
 		holders = new WorkerThread[5];
 		for(int i = 0; i < holders.length; i++)
 		{
-			holders[i] = new WorkerThread();
+			//holders[i] = new WorkerThread();
 			//holders[i].start();	//tHIS 
 		}
 	}
@@ -100,7 +98,7 @@ public class ThreadPool
 
 //double the threads in pool according to threshold	
 	public synchronized void increaseThreadsInPool()
-	{
+ 	{
 		WorkerThread[] temp = new WorkerThread[holders.length * 2];
 		for(int i = 0; i < temp.length; i++)
 		{
@@ -154,11 +152,6 @@ public class ThreadPool
 	public synchronized int maxCapacity()
 	{
 		return this.maxCapacity;
-	}
-	
-	public synchronized boolean isRunning()
-	{
-		return isRunning;
 	}
 	
 	//Current test method

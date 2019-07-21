@@ -93,7 +93,7 @@ public class CapitalizeClient {
         * client immediately after establishing a connection.
         */
       public void connectToServer() throws IOException 
-      {
+      { 
 
             // Get the server address from a dialog box.
             String serverAddress = JOptionPane.showInputDialog(

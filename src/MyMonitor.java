@@ -37,17 +37,18 @@ public class MyMonitor
 			return serviceRequested;
 		}
 
+
+		
 		public void runJob()
 		{
 			int result;
 			if(serviceRequested.equals("KILL"))
 			{
 				result = 1; //change this to kill the threads - may have to do more with this
-				return;
 			}
 			String[] operands = serviceRequested.split(",");
 			int num1 = Integer.parseInt(operands[1]);
-			int num2 = Integer.parseInt(operands[2]);
+			int num2 = Integer.parseInt(operands[2]); 
 			if(operands[0].equals("ADD"))
 			{
 				result = num1 + num2;
@@ -64,7 +65,6 @@ public class MyMonitor
 			{
 				result = num1 / num2;
 			}
-			out.println(result);
 			out.println(result);
 			printLog(operands[0], num1, num2, result);
 			
@@ -120,15 +120,9 @@ public class MyMonitor
 			Thread currentThread = Thread.currentThread();
 			
 			System.out.println("Worker Thread #" + currentThread.getId() + " processed service"
-					+ "request " + command + ", " + value1 + ", " + value2 + " at TIME: " + dateFormat.format(cal));
+					+ "request " + command + ", " + value1 + ", " + value2 + " at TIME: " + dateFormat);
 		}
 		
-		@Override
-		public String toString()
-		{
-			//return this.action.toString();
-			return"";
-		}
 	}
 	
 	//took queue class from previous assignment with modifications. Still needs work on it for functionality of this project.
@@ -171,7 +165,7 @@ public class MyMonitor
 			} 
 			catch (InterruptedException e) 
 			{
-				//e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		
@@ -188,7 +182,7 @@ public class MyMonitor
 		
 		tail = node;          
 		size++;
-		
+		System.out.println(this);
 		notifyAll();
 	}
 	
@@ -207,7 +201,7 @@ public class MyMonitor
 	         }
 	         catch (InterruptedException e ) 
 	         {
-	             //e.printStackTrace();//should stop thread?
+	             e.printStackTrace();//should stop thread?
 	         }		
 	    }
 		
@@ -233,7 +227,7 @@ public class MyMonitor
 	public String toString()
 	{
 		Job tempNode = this.head;
-		String toStr = "";
+		String toStr = "Size: "+size;
 		
 		while(tempNode != null)
 		{
