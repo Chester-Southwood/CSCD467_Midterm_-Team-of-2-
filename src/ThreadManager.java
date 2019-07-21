@@ -27,16 +27,16 @@ public class ThreadManager
 		{
 			myPool.increaseThreadsInPool(); 	//Grow from 5 to 10
 		}
-		if(myPool.numberThreadsRunning() < 10 && jobQueue.size() > 20)
+		else if(myPool.numberThreadsRunning() < 10 && jobQueue.size() > 20)
 		{
 			myPool.increaseThreadsInPool();		//Grow from 10 to 20
 		}
 //Decreasing		
-		if(myPool.numberThreadsRunning() >= 20 && jobQueue.size() <= 20) //Running 20 but less than 20 waiting in the queue
+		else if(myPool.numberThreadsRunning() >= 20 && jobQueue.size() <= 20) //Running 20 but less than 20 waiting in the queue
 		{
 			myPool.decreaseThreadsInPool();		//Shrink from 20 to 10
 		}
-		if(myPool.numberThreadsRunning() >= 10 && jobQueue.size() <= 10) //Running 10 but less than 10 waiting in the queue
+		else if(myPool.numberThreadsRunning() >= 10 && jobQueue.size() <= 10) //Running 10 but less than 10 waiting in the queue
 		{
 			myPool.decreaseThreadsInPool();		//Shrink from 10 to 5
 		}

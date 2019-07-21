@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /*
  * the job will be processed by one of
@@ -62,6 +65,8 @@ public class MyMonitor
 			}
 			out.println(result);
 			out.println(result);
+			printLog(operands[0], num1, num2, result);
+			
 		}
 		
 		public void setServiceRequested(String serviceRequested) 
@@ -106,6 +111,17 @@ public class MyMonitor
 			}
 		}
 		
+		//# 4 from directions, print all actions performed on server onto standard out.
+		public void printLog(String command, int value1, int value2, int result)
+		{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			Thread currentThread = Thread.currentThread();
+			
+			System.out.println("Worker Thread #" + currentThread.getId() + " processed service"
+					+ "request " + command + ", " + value1 + ", " + value2 + " at TIME: " + dateFormat.format(cal));
+		}
+		
 		@Override
 		public String toString()
 		{
@@ -128,36 +144,6 @@ public class MyMonitor
 		this.maxSize = 50;
 		this.size = 0;
 	}
-	
-	/*public synchronized int getLineCount()
-	{
-		return this.lineCount;
-	}
-	
-	public synchronized void setLineCount(int value)
-	{
-		this.lineCount += value;
-	}
-	
-	public synchronized int getRegexCount()
-	{
-		return this.regexCount;
-	}
-	
-	public synchronized void incrementRegexCount(int value)
-	{
-		this.regexCount += value;
-	}
-	
-	public synchronized boolean getIsDoneSearching()
-	{
-		return this.isDoneSearching;
-	}
-	
-	public synchronized void setIsDoneSearching(boolean value)
-	{
-		this.isDoneSearching = value;
-	}*/
 
 	public synchronized boolean isEmpty() 
 	{

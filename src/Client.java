@@ -10,6 +10,7 @@ public class Client extends Thread
 	  private BufferedReader in;
       private PrintWriter out;
       Socket socket;
+      //test cases for commands
       String[] commands = {"asdf", "capitalize me", "I hope this works", "A+ Material here :D", "ADD,4,5", "MUL,6,8", "DIV,50,5", "SUB,53425,2345", "ADD,455,4355", "MUL,6346,84365", "DIV,543650,7655", "SUB,765425,6575"}; 
       
       public void run()
@@ -68,5 +69,12 @@ public class Client extends Thread
             out = new PrintWriter(socket.getOutputStream(), true);
 
             // Consume the initial welcoming messages from the server
-      }			
+      }		
+      
+      public void sendCommand(String command) throws IOException
+      {
+    	  this.connectToServer();
+    	  this.out.println(command);
+    	  System.out.println(in.readLine());
+      }
 	}

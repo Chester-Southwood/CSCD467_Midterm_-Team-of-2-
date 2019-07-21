@@ -17,7 +17,7 @@ public class ThreadPool
 	WorkerThread holders[]; //stores the worker thread references
 	boolean stopped; //used to receive a stop signal from main thread
 	MyMonitor jobQueue; //shared by all WorkerThread in the pool and ThreadManager
-	int v;
+	final int v = 500; //5 seconds
 	int t1;
 	int t2;
 	//and the main server thread
@@ -53,7 +53,6 @@ public class ThreadPool
 	{
 		public boolean running = false;
 		public MyMonitor.Job myJob;
-		public int result;
 		public WorkerThread()
 		{
 			this.myJob = jobQueue.getHead();
@@ -90,14 +89,15 @@ public class ThreadPool
 //threads start to process jobs	
 	public void startPool()
 	{
-		for(int i = 0; i < holders.length; i++)
+		//if do .lengt, would it do all index, if so it may try to do null.start()?
+		for(int i = 0; i < actualNumberThreads; i++)
 		{
 			holders[i].start();
 		}
 	}
 
 //double the threads in pool according to threshold	
-	public void increaseThreadsInPool()
+	public synchronized void increaseThreadsInPool()
 	{
 		WorkerThread[] temp = new WorkerThread[holders.length * 2];
 		for(int i = 0; i < temp.length; i++)
@@ -109,6 +109,8 @@ public class ThreadPool
 			else
 			{ 
 				//temp[i] = new WorkerThread();
+				
+				//will it throw error?
 				temp[i].start();
 			}
 		}
@@ -117,12 +119,16 @@ public class ThreadPool
 	}
 	
 //halve the threads in pool according to threshold	
-	public void decreaseThreadsInPool()
+	public synchronized void decreaseThreadsInPool()
 	{
 		WorkerThread[] temp = new WorkerThread[holders.length/2];
 		for(int i = 0; i < temp.length; i++)
 		{
 			temp[i] = holders[i];
+		}
+		for(int i = temp.length; i < this.holders.length; i++)
+		{
+			holders[i].interrupt();//kill threads
 		}
 		this.holders = temp;
 		actualNumberThreads = actualNumberThreads/2;
@@ -138,12 +144,12 @@ public class ThreadPool
 		}
 	}
 	
-	public int numberThreadsRunning()
+	public synchronized int numberThreadsRunning()
 	{
 		return actualNumberThreads; 
 	}
 	
-	public int maxCapacity()
+	public synchronized int maxCapacity()
 	{
 		return this.maxCapacity;
 	}
